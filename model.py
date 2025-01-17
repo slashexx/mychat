@@ -58,9 +58,11 @@ def chat():
 
     try:
         # Interact with Groclake's ModelLake
-        payload = {"messages": conversation_history}
+        payload = {"messages": conversation_history, "max-tokens": 20000}
         response = model_lake.chat_complete(payload)
         bot_reply = response.get("answer", "I'm sorry, I couldn't process that. Please try again.")
+
+        print(bot_reply)
 
         return jsonify({"response": bot_reply}), 200
     except Exception as e:

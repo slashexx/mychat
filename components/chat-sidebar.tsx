@@ -9,7 +9,7 @@ export function ChatSidebar() {
   const { chats, currentChatId, addChat, setCurrentChat, deleteChat } = useChatStore();
 
   return (
-    <div className="w-[280px] h-screen bg-black/40 backdrop-blur-xl border-r border-white/[0.08] flex flex-col">
+    <div className="w-[280px] h-screen bg-black/40 backdrop-blur-xl border-r border-white/[0.08] flex flex-col overflow-x-hidden">
       <Button
         onClick={() => addChat()}
         className="m-3 gap-2 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 hover:text-indigo-200"
@@ -34,7 +34,7 @@ export function ChatSidebar() {
               onClick={() => setCurrentChat(chat.id)}
             >
               <MessageSquare className="w-4 h-4" />
-              <span className="truncate">{chat.title}</span>
+              <span className="break-words">{chat.title}</span> {/* Allow multi-line text */}
             </Button>
             <Button
               variant="ghost"

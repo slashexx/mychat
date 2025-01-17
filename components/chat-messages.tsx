@@ -15,12 +15,11 @@ export function ChatMessages() {
   const messages = currentChat?.messages || [];
 
   useEffect(() => {
-    // Scroll to the bottom when new messages are added
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-
-    // Highlight all code blocks in the messages after render
-    Prism.highlightAll();
-  }, [messages]);
+    // Ensure we scroll to the last message on new messages
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]); // Triggered on new messages
 
   // Copy function for code blocks
   const copyToClipboard = (text: string) => {
@@ -54,7 +53,8 @@ export function ChatMessages() {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 space-y-6 max-h-[500px]"> {/* Limit height here */}
+    <div className="flex-1 overflow-y-auto p-4 space-y-6 max-h-[500px]">
+      {/* Render each message */}
       {messages.map((message: Message) => (
         <div
           key={message.id}
@@ -93,6 +93,7 @@ export function ChatMessages() {
           </div>
         </div>
       ))}
+      {/* Scroll to the latest message */}
       <div ref={messagesEndRef} />
     </div>
   );
