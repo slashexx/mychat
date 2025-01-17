@@ -50,14 +50,18 @@ def chat():
     if not user_input:
         return jsonify({"error": "Message is required"}), 400
     
-    context = request.json.get('messages')
+    # Get the conversation context from the previous messages
+    context = request.json.get('messages', [])
 
     # Prepare the conversation payload
-    conversation_history = [
-        {"role": "system", "content": full_system_content},
-        {"role": "user", "content": context },
-        {"role": "user", "content": user_input},
-    ]
+    conversation_history = [{"role": "system", "content": full_system_content}]
+    
+    # If there is any existing chat context, append it
+    for msg in context:
+        conversation_history.append({"role": msg.get('role', 'user'), "content": msg.get('content', '')})
+
+    # Add the current user's message to the history
+    conversation_history.append({"role": "user", "content": user_input})
 
     try:
         # Interact with Groclake's ModelLake
@@ -67,8 +71,10 @@ def chat():
 
         print(bot_reply)
 
+        # Return the response from ModelLake
         return jsonify({"response": bot_reply}), 200
     except Exception as e:
+        print(f"Error: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
