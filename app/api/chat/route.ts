@@ -6,7 +6,7 @@ const PYTHON_SERVER_URL = process.env.PYTHON_SERVER_URL || 'http://127.0.0.1:500
 export const runtime = 'edge';
 // Use edge runtime for faster responses
 
-async function POST(req: Request) {
+export async function POST(req: Request) {
   console.log('API Route: POST /api/chat');
   try {
     // Parse the user's message from the request body
@@ -57,5 +57,3 @@ async function POST(req: Request) {
     );
   }
 }
-
-export default POST;
