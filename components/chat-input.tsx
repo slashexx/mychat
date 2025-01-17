@@ -25,6 +25,7 @@ export function ChatInput() {
     setIsLoading(true);
 
     try {
+      console.log("Fetching frontend to backend : ", input.trim());
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

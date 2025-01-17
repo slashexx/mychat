@@ -1,3 +1,4 @@
+import { log } from 'console';
 import { NextResponse } from 'next/server';
 
 const PYTHON_SERVER_URL = process.env.PYTHON_SERVER_URL || 'http://127.0.0.1:5000/chat'; // Python API URL
@@ -18,7 +19,8 @@ async function POST(req: Request) {
     // Prepare the payload to send to the Python backend
     const payload = { message };
 
-    // Call the Python server
+      // Call the Python server
+      console.log("Sending request to Python server:", payload);
     const pythonResponse = await fetch(PYTHON_SERVER_URL, {
       method: 'POST',
       headers: {
