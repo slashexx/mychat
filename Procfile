@@ -1,1 +1,1 @@
-web: python model.py
+web: gunicorn wsgi:app
