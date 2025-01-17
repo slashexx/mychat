@@ -28,20 +28,25 @@ export function ChatInput() {
       // Find the current chat and gather the previous messages
       const currentChat = chats.find(chat => chat.id === currentChatId);
       const chatHistory = currentChat?.messages || [];
-      const messages = chatHistory.map((message) => message.content);  // Collect all previous messages
-
+      
+      // Modify the mapping to include both role and content
+      const messages = chatHistory.map((message) => ({
+        role: message.role,  // Ensure the role is included
+        content: message.content,  // And the content
+      }));
+    
       // Send both the current message and the previous chat history
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: input.trim(),
-          messages: messages,  // Send the previous messages
+          messages: messages,  // Send the previous messages with role and content
         }),
       });
-
+    
       const data = await response.json();
-
+    
       if (data.response) {
         // Add assistant's response to the chat
         addMessage(currentChatId, {
@@ -55,6 +60,7 @@ export function ChatInput() {
     } finally {
       setIsLoading(false);
     }
+    
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
