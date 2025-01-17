@@ -21,4 +21,4 @@ ENV GROCLAKE_API_KEY=65b9eea6e1cc6bb9f0cd2a47751a186f
 ENV GROCLAKE_ACCOUNT_ID=3ddb1f07de092e40e54278fb4a779285
 
 # Command to run the Flask app
-CMD ["python", "app.py"]
+CMD ["python", "model.py"]
