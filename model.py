@@ -49,10 +49,13 @@ def chat():
     user_input = request.json.get('message')
     if not user_input:
         return jsonify({"error": "Message is required"}), 400
+    
+    context = request.json.get('messages')
 
     # Prepare the conversation payload
     conversation_history = [
         {"role": "system", "content": full_system_content},
+        {"role": "user", "content": context },
         {"role": "user", "content": user_input},
     ]
 

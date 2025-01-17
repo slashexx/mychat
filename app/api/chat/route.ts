@@ -10,14 +10,14 @@ export async function POST(req: Request) {
   console.log('API Route: POST /api/chat');
   try {
     // Parse the user's message from the request body
-    const { message } = await req.json();
+    const { message, messages } = await req.json();
 
     if (!message) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
     }
 
     // Prepare the payload to send to the Python backend
-    const payload = { message };
+    const payload = { message, messages };
 
       // Call the Python server
       console.log("Sending request to Python server:", payload);

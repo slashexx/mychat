@@ -9,7 +9,7 @@ import { useChatStore } from "@/hooks/use-chat-store";
 export function ChatInput() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { currentChatId, addMessage } = useChatStore();
+  const { currentChatId, addMessage, chats } = useChatStore();
 
   const handleSubmit = async () => {
     if (!input.trim() || !currentChatId || isLoading) return;
@@ -20,21 +20,30 @@ export function ChatInput() {
       timestamp: Date.now(),
     };
 
-    addMessage(currentChatId, userMessage);
+    addMessage(currentChatId, userMessage);  // Add the user's message to the chat history
     setInput("");
     setIsLoading(true);
 
     try {
-      console.log("Fetching frontend to backend : ", input.trim());
+      // Find the current chat and gather the previous messages
+      const currentChat = chats.find(chat => chat.id === currentChatId);
+      const chatHistory = currentChat?.messages || [];
+      const messages = chatHistory.map((message) => message.content);  // Collect all previous messages
+
+      // Send both the current message and the previous chat history
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: input.trim() }),
+        body: JSON.stringify({
+          message: input.trim(),
+          messages: messages,  // Send the previous messages
+        }),
       });
 
       const data = await response.json();
 
       if (data.response) {
+        // Add assistant's response to the chat
         addMessage(currentChatId, {
           content: data.response,
           role: "assistant",
